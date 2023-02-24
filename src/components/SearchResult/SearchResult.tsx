@@ -19,7 +19,7 @@ export default function SearchResult(props: {
     when: string,
     duration: string,
     text: {text: string; seconds: number; time: string;}[],
-    channel: string,
+    channel: {name: string, link: string},
     searchTerm: string;
     destination: string;
 }) {
@@ -54,7 +54,15 @@ export default function SearchResult(props: {
             </div>
             <div className={styles.textContainer}>
                 <a href={props.destination + "&t=" + props.text[0].seconds} target="_blank"><h1 className={styles.title}>{title}</h1></a>
-                <span className={styles.when}>{props.channel} | {props.when}</span>
+                <span className={styles.when}>
+                    <a 
+                        className={styles.annotation}
+                        style={{ marginRight: 5 }}
+                        target="_blank"
+                        href={"https://youtube.com/" + props.channel.link}>{props.channel.name}
+                    </a> 
+                         | {props.when}
+                </span>
             </div>
             <div className={styles.text}>
                 {texts}

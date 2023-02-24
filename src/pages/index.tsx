@@ -55,7 +55,7 @@ export default function Home() {
         when={prettyDate}
         duration={hit.duration}
         text={hit.text}
-        channel={hit.channel.name}
+        channel={hit.channel}
         searchTerm={term}
         destination={hit.link}
       />
