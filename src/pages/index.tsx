@@ -14,7 +14,7 @@ const client = algoliasearch(
   '3f9c651c67b4f7514372619b1f19dad7',
 );
 
-const index = client.initIndex('Smaller Chunks');
+const index = client.initIndex('Revised');
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
@@ -34,19 +34,26 @@ export default function Home() {
     index.search(term, {
       highlightPreTag: '<strong>'
     }).then(({ hits }) => {
-      console.log(hits[0])
       setHits(hits)
     });
   }, [term])
 
   const searchResults = hits.map((hit: any) => {
+
+    // Prettify date from YYYY-MM-DD to human readable (e.g. one year ago):
+    let prettyDate = new Date(hit.uploadDate).toLocaleDateString('en-US', {
+      year: 'numeric',
+      ['month']: 'long',
+      day: 'numeric'
+    })
+
     return (<SearchResult 
       title={hit.title}
-      image={hit.thumbnails[3].url}
-      when={"1 day ago"}
-      duration={"15:30"}
+      image={hit.thumbnails[4].url}
+      when={prettyDate}
+      duration={hit.duration}
       text={hit.text}
-      channel="poopesh"
+      channel={hit.channel.name}
       searchTerm={term}
       destination={hit.link}
     />)

@@ -18,24 +18,20 @@ export default function SearchResult(props: {
     image: string,
     when: string,
     duration: string,
-    text: string[],
+    text: {text: string; seconds: number; time: string;}[],
     channel: string,
     searchTerm: string;
     destination: string;
 }) {
 
-    let texts = props.text.map((text) => {
+    let texts = props.text.map((item) => {
 
         // clip first 19 characters of 'text':
-        let annotation = text.slice(1, 18)
-        let rest = text.slice(19)
+        let { text, time, seconds } = item
 
-        let highlighted = getHighlightedText(rest, props.searchTerm)
+        let annotation = time
 
-
-        // Get seconds from timestamp H:MM:SS : H:MM:SS
-        let seconds = 0        
-        annotation.slice(0, 7).split(":").reverse().map((acc: any, time) => seconds += (parseInt(acc))*60*time);
+        let highlighted = getHighlightedText(text, props.searchTerm)
 
         // Add youtube timestamp to url as link:
         let destination = props.destination + "&t=" + seconds
