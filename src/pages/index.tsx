@@ -8,6 +8,9 @@ import { useEffect, useState } from 'react'
 import SearchBar from '@/components/SearchBar/SearchBar'
 import SearchResult from '@/components/SearchResult/SearchResult'
 
+import { useRouter } from 'next/router';
+
+import Router from 'next/router'
 
 const client = algoliasearch(
   'WP9YK3LA1O',
@@ -18,8 +21,17 @@ const index = client.initIndex('Revised');
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
-  let [term, setTerm] = useState<string>('')
+  const router = useRouter();
+
+  let [term, setTerm] = useState<string>("")
   let [hits, setHits] = useState<any>([])
+
+  const { asPath, isReady } = router;
+
+  useEffect(() => {
+    if (!isReady) return;
+    setTerm(router.query.q as string)
+  }, [asPath, isReady])
 
   useEffect(() => {
     index.setSettings({
@@ -73,7 +85,13 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         <div className={styles.container}>
-          <SearchBar term={term} onChange={(v: string) => setTerm(v)} />
+          <SearchBar term={term} onChange={(v: string) => {
+            Router.push({
+              pathname: '/',
+              query: { q: v },
+          })
+            setTerm(v)
+          }} />
           <div className={styles.results}>
             {searchResults}
           </div>
